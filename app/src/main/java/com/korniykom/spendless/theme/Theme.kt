@@ -1,4 +1,4 @@
-package com.korniykom.spendless.ui.theme
+package com.korniykom.spendless.theme
 
 import android.app.Activity
 import android.os.Build

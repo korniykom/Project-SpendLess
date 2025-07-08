@@ -1,4 +1,4 @@
-package com.korniykom.spendless.ui.theme
+package com.korniykom.spendless.theme
 
 import androidx.compose.ui.graphics.Color
 

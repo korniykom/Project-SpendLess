@@ -11,7 +11,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.korniykom.spendless.ui.theme.SpendLessTheme
+import com.korniykom.spendless.navigation.NavigationRoot
+import com.korniykom.spendless.theme.SpendLessTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,28 +21,14 @@ class MainActivity : ComponentActivity() {
         setContent {
             SpendLessTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                   NavigationRoot(
+                       isFirstLaunch = true,
+                       modifier = Modifier
+                           .fillMaxSize()
+                           .padding(innerPadding)
+                   )
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    SpendLessTheme {
-        Greeting("Android")
     }
 }
