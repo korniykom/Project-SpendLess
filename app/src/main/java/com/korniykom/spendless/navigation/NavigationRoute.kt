@@ -5,6 +5,9 @@ import kotlinx.serialization.Serializable
 
 sealed interface NavigationRoute : NavKey{
     @Serializable
+    data object RegistrationFlow: NavigationRoute
+
+    @Serializable
     data object RegistrationStartScreen: NavigationRoute
     @Serializable
     data object RegistrationPinScreen: NavigationRoute

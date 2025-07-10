@@ -14,16 +14,18 @@ import com.korniykom.spendless.screens.login.LoginScreen
 import com.korniykom.spendless.screens.registration.RegistrationPinConfirmationScreen
 import com.korniykom.spendless.screens.registration.RegistrationPinScreen
 import com.korniykom.spendless.screens.registration.RegistrationSetPreferencesScreen
-import com.korniykom.spendless.screens.registration.RegistrationStartScreen
+import com.korniykom.spendless.screens.registration.RegistrationStartScreenRoot
+import com.korniykom.spendless.screens.registration.RegistrationViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun NavigationRoot(
     isFirstLaunch: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val backStack = rememberNavBackStack<NavigationRoute>(
         if(isFirstLaunch) {
-            NavigationRoute.RegistrationStartScreen
+            NavigationRoute.RegistrationFlow
         } else {
             NavigationRoute.LoginScreen
         }
@@ -37,17 +39,43 @@ fun NavigationRoot(
             rememberViewModelStoreNavEntryDecorator()
         ),
         entryProvider = entryProvider {
-            entry<NavigationRoute.RegistrationStartScreen> {
-                RegistrationStartScreen()
-            }
-            entry<NavigationRoute.RegistrationPinScreen> {
-                RegistrationPinScreen()
-            }
-            entry<NavigationRoute.RegistrationPinConfirmationScreen> {
-                RegistrationPinConfirmationScreen()
-            }
-            entry<NavigationRoute.RegistrationSetPreferencesScreen> {
-                RegistrationSetPreferencesScreen()
+            entry<NavigationRoute.RegistrationFlow> {
+                val registrationViewModel = koinViewModel<RegistrationViewModel>()
+                val registrationBackstack = rememberNavBackStack<NavigationRoute>(
+                    NavigationRoute.RegistrationStartScreen
+                )
+                NavDisplay(
+                    backStack = registrationBackstack,
+                    entryDecorators = listOf(
+                        rememberSceneSetupNavEntryDecorator(),
+                        rememberSavedStateNavEntryDecorator(),
+                        rememberViewModelStoreNavEntryDecorator()
+                    ),
+                    onBack = {
+                        registrationBackstack.removeLastOrNull()
+                    },
+                    entryProvider = entryProvider {
+                        entry<NavigationRoute.RegistrationStartScreen> {
+                            RegistrationStartScreenRoot(
+                                viewModel = registrationViewModel,
+                                onNextButtonClick = {
+                                    registrationBackstack.add(NavigationRoute.RegistrationPinScreen)
+                                },
+                            )
+                        }
+                        entry<NavigationRoute.RegistrationPinScreen> {
+                            RegistrationPinScreen(
+                                viewModel = registrationViewModel
+                            )
+                        }
+                        entry<NavigationRoute.RegistrationPinConfirmationScreen> {
+                            RegistrationPinConfirmationScreen()
+                        }
+                        entry<NavigationRoute.RegistrationSetPreferencesScreen> {
+                            RegistrationSetPreferencesScreen()
+                        }
+                    }
+                )
             }
             entry<NavigationRoute.LoginScreen> {
                 LoginScreen()
