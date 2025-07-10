@@ -32,9 +32,9 @@ fun NavigationRoot(
         backStack = backStack,
         onBack = {},
         entryDecorators = listOf(
+            rememberSceneSetupNavEntryDecorator(),
             rememberSavedStateNavEntryDecorator(),
-            rememberViewModelStoreNavEntryDecorator(),
-            rememberSceneSetupNavEntryDecorator()
+            rememberViewModelStoreNavEntryDecorator()
         ),
         entryProvider = entryProvider {
             entry<NavigationRoute.RegistrationStartScreen> {
